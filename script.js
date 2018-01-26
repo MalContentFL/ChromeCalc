@@ -76,7 +76,7 @@ function calculate() {
 
         // For ) [Put a * after]
         for (var i = 0; i < a.length; i++) {
-            if (a[i] == ")" && i + 1 < a.length) {
+            if (a[i] == ")" && i + 1 < a.length && a[i+1] != ")") {
                 console.log("Detected ) at: " + i);
                 a = insertStr(a, ')*', i);
                 i += 2;
@@ -111,17 +111,17 @@ function insertStr(startingStr, insertStr, index) {
     return finalStr;
 }
 
-let isCalcScreen = true;
+let isSettingScreen = false;
 let originalInnerHTML = document.getElementById("body").innerHTML;
 
 function cogOnClick() {
     console.log("Click!");
-    if (!isCalcScreen) {
+    if (!isSettingScreen) {
         document.getElementById("body").innerHTML = originalInnerHTML;
-        isCalcScreen = true;
+        isSettingScreen = false;
     } else {
         document.getElementById("body").innerHTML = settingsHTML;
-        isCalcScreen = false;
+        isSettingScreen = true;
     }
 }
 
@@ -143,7 +143,7 @@ function allNumeric(inputtxt) {
     // Allowed characters
     let numbers = /^[0-9,(,),+,\-,*,/,^,%,\.]+$/;
     // Makes sure inputtxt only has allowed chars
-    if (new String(inputtxt).match(numbers)) {
+    if (inputtxt.match(numbers) || inputtxt === '') {
         console.log("All Numeric!");
         return true;
     } else {
@@ -151,3 +151,8 @@ function allNumeric(inputtxt) {
         return false;
     }
 }
+
+// Various Event Listeners loaded after their respective functions.
+// Event Listener for the settings page button
+document.getElementsByClassName("fa-cog")[0].addEventListener("click", cogOnClick());
+document.getElementById("screen-text").addEventListener("change", calculate());

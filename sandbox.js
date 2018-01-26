@@ -11,7 +11,7 @@ Date: 1/25/2018
 function evaluate(a){
     // Evaluate a
     try {
-        return eval('' + a);
+        a = eval('' + a);
     } catch (error) {
         // prints different errors depending on error message
         if (error.message.indexOf("EvalError" != -1))
@@ -23,4 +23,5 @@ function evaluate(a){
         }
         console.log(error);
     }
+    return a;
 }
