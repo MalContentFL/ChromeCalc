@@ -1,0 +1,75 @@
+<!--
+Program: ChromeCalc
+Description: The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / and ().
+        Please report any bugs through the settings menu. Thanks!
+Author: Quintin Kerns
+Date: 1/25/2018
+*/
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>ChromeCalc</title>
+
+    <link href="style.css" rel="stylesheet" type="text/css"></link>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="model-header">
+        <h1 class="logo">
+            <img class="logo-icon" src="images/icon_tiny.png">ChromeCalc
+            <span class="settings">
+                <i class="fa fa-cog" onclick="cogOnClick()" aria-hidden="true"></i>
+            </span>
+        </h1>
+        <hr>
+        <div id="body">
+            <div class="calculator">
+                <div class="screen">
+                    <div id="result"></div>
+                    <input onchange="calculate()" type="text" name="screen-text" id="screen-text" autofocus>
+                </div>
+                <div class="keypad">
+                    <table>
+                        <tr>
+                            <td class="key">7</td>
+                            <td class="key">8</td>
+                            <td class="key">9</td>
+                            <td class="key">+</td>
+                        </tr>
+                        <tr>
+                            <td class="key">4</td>
+                            <td class="key">5</td>
+                            <td class="key">6</td>
+                            <td class="key">-</td>
+                        </tr>
+                        <tr>
+                            <td class="key">1</td>
+                            <td class="key">2</td>
+                            <td class="key">3</td>
+                            <td class="key">*</td>
+                        </tr>
+                        <tr>
+                            <td class="key">C</td>
+                            <td class="key">0</td>
+                            <td class="key">=</td>
+                            <td class="key">/</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+    <script src="sandbox.js"></script>
+    <script src="script.js"></script>
+</html>
