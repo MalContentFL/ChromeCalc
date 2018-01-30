@@ -13,13 +13,7 @@ function evaluate(input){
         input = eval('' + input);
     } catch (error) {
         // prints different errors depending on error message
-        if (error.message.indexOf("EvalError" != -1))
-        {
-            printResult(error.message);
-        }
-        else {
-            printResult("EVAL ERR");
-        }
+        input = "EVAL ERR";
         console.log(error);
     }
     return input;
