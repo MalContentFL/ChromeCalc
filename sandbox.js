@@ -8,10 +8,10 @@ Date: 1/25/2018
 
 // Sandbox for eval() since Chrome is mean :(
 
-function evaluate(a){
+function evaluate(input){
     // Evaluate a
     try {
-        a = eval('' + a);
+        input = eval('' + input);
     } catch (error) {
         // prints different errors depending on error message
         if (error.message.indexOf("EvalError" != -1))
@@ -23,5 +23,5 @@ function evaluate(a){
         }
         console.log(error);
     }
-    return a;
+    return input;
 }

@@ -1,23 +1,32 @@
 /*
 Program: ChromeCalc
 Description: The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / ^ % and ().
-        Please report any bugs through the settings menu. Thanks!
+    Please report any bugs through the settings menu. Thanks!
 Author: Quintin Kerns
 Date: 1/25/2018
 */
 
 console.log("Finished Loading HTML!");
+
 let keys = document.getElementsByClassName("key");
 console.log(keys);
 // Convert keys to an array from HTMLCollectionOf
 keys = [].slice.call(keys);
 // Put Event Listeners on all 16 keys
-keys.forEach(function (element) {
-    console.log("Element: " + element);
-    element.addEventListener("click", function (e) {
+// keys.forEach(function (element) {
+//     console.log("Element: " + element);
+//     element.addEventListener("click", function (e) {
+//         console.log("Pressed key: " + e.target.innerHTML);
+//         keyClick(e.target.innerHTML);
+//     });
+// });
+for (let i = 0; i < keys.length; i++)
+{
+    keys[i].addEventListener("click", function (e) {
+        console.log("Pressed key: " + e.target.innerHTML);
         keyClick(e.target.innerHTML);
-    });
-});
+    })
+}
 
 function keyClick(inner) {
     console.log("inner: " + inner);
@@ -25,8 +34,8 @@ function keyClick(inner) {
     switch (inner) {
         // Clear screen-text
         case 'C':
-            document.getElementById("screen-text").value = '';
-            document.getElementById("result").innerHTML = '';
+            document.getElementById("screen-text").value = null;
+            document.getElementById("result").innerHTML = null
             break;
             // Execute calculate()
         case '=':
@@ -43,51 +52,20 @@ function keyClick(inner) {
     ERR2: Evaluation Error
     ERR3: Chrome Extension-related Error
 */
-function calculate() {
-    let a = document.getElementById("screen-text").value;
+function calculate(event) {
+    let input= document.getElementById("screen-text").value;
 
-    console.log("Input: " + a);
+    console.log("Input: " + input);
 
-    // Make sure a is only numbers and operators
-    if (!allNumeric(a) || a == undefined) {
+    // Make sure input is only numbers and operators
+    if (!allNumeric(input) || input == undefined) {
         printResult("ERR1");
     } else {
-        // Do specific things for certain characters so it evaluates correctly
-        console.log("Cleansing a of ^ % ( )");
-        // For ^
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] == "^") {
-                console.log("Detected ^ at: " + i);
-                a = insertStr(a, '**', i);
-                i += 2;
-            }
-            console.log("Index: " + i);
-        }
+        input = characterSpecialCases(input);
+        input = evaluate(input);
 
-        // For ( [Put a * before]
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] == "(") {
-                console.log("Detected ( at: " + i);
-                a = insertStr(a, '*(', i);
-                i += 2;
-            }
-            console.log("Index: " + i);
-        }
-
-        // For ) [Put a * after]
-        for (var i = 0; i < a.length; i++) {
-            if (a[i] == ")" && i + 1 < a.length && a[i+1] != ")") {
-                console.log("Detected ) at: " + i);
-                a = insertStr(a, ')*', i);
-                i += 2;
-            }
-            console.log("Index: " + i);
-        }
-
-        a = evaluate(a);
-
-        console.log("Output: " + a);
-        printResult(a);
+        console.log("Output: " + input);
+        printResult(input);
         return true;
     }
 }
@@ -114,8 +92,7 @@ function insertStr(startingStr, insertStr, index) {
 let isSettingScreen = false;
 let originalInnerHTML = document.getElementById("body").innerHTML;
 
-function cogOnClick() {
-    console.log("Click!");
+function cogOnClick(event) {
     if (!isSettingScreen) {
         document.getElementById("body").innerHTML = originalInnerHTML;
         isSettingScreen = false;
@@ -139,11 +116,11 @@ let settingsHTML = "hi";
 // {
 
 // }
-function allNumeric(inputtxt) {
+function allNumeric(input) {
     // Allowed characters
     let numbers = /^[0-9,(,),+,\-,*,/,^,%,\.]+$/;
-    // Makes sure inputtxt only has allowed chars
-    if (inputtxt.match(numbers) || inputtxt === '') {
+    // Makes sure input only has allowed chars
+    if (input.match(numbers) || input === '') {
         console.log("All Numeric!");
         return true;
     } else {
@@ -152,7 +129,74 @@ function allNumeric(inputtxt) {
     }
 }
 
-// Various Event Listeners loaded after their respective functions.
+function characterSpecialCases(input)
+{
+    // Do specific things for certain characters so it evaluates correctly
+    console.log("Cleansing input of ^ % ( )");
+
+    for (let i = 0; i < input.length; i++);
+    {
+        switch (input[i])
+        {
+            case "^":
+            console.log("^ at " + i);
+            input = insertStr(input, '**', i);
+                break;
+            case "(":
+            console.log("( at " + i);
+            if (input[i] - 1 !== "(" && input[i] - 1 !== "*")
+            {
+                input = insertStr(input, '*', i);
+            }
+            break;
+            case ")":
+            console.log(") at " + i);
+            if (input[i] + 1 !== ")" && input[i] + 1 !== "*")
+            {
+                input = insertStr(input, '*', i);
+            }
+            break;
+            default:
+            console.log("No illegal char at " + i);
+            break;
+        }
+    }
+    return input;
+
+    // // For ^
+    // for (var i = 0; i < a.length; i++) {
+    //     if (a[i] == "^") {
+    //         console.log("Detected ^ at: " + i);
+    //         a = insertStr(a, '**', i);
+    //         i += 2;
+    //     }
+    //     console.log("Index: " + i);
+    // }
+
+    // // For ( [Put a * before]
+    // for (var i = 0; i < a.length; i++) {
+    //     if (a[i] == "(" && a[i] == "*") {
+    //         console.log("Detected ( at: " + i);
+    //         a = insertStr(a, '*(', i);
+    //         i += 2;
+    //     }
+    //     console.log("Index: " + i);
+    // }
+
+    // // For ) [Put a * after]
+    // for (var i = 0; i < a.length; i++) {
+    //     if (a[i] == ")" && i + 1 < a.length && a[i+1] != ")") {
+    //         console.log("Detected ) at: " + i);
+    //         a = insertStr(a, ')*', i);
+    //         i += 2;
+    //     }
+    //     console.log("Index: " + i);
+    // }
+}
+
+// Various Event Listeners loaded after their respective functions
 // Event Listener for the settings page button
-document.getElementsByClassName("fa-cog")[0].addEventListener("click", cogOnClick());
-document.getElementById("screen-text").addEventListener("change", calculate());
+document.getElementsByClassName("fa-cog")[0].addEventListener("click", cogOnClick(event));
+// Event Listener for the screen-text
+document.getElementById("screen-text").addEventListener("change", function(){
+    calculate(event);});
