@@ -9,7 +9,6 @@ Date: 1/25/2018
 // Sandbox for eval() since Chrome is mean :(
 
 function evaluate(input){
-    // Evaluate a
     try {
         input = eval('' + input);
     } catch (error) {
@@ -19,7 +18,7 @@ function evaluate(input){
             printResult(error.message);
         }
         else {
-            printResult("ERR2");
+            printResult("EVAL ERR");
         }
         console.log(error);
     }
