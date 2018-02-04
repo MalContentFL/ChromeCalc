@@ -9,6 +9,98 @@ Date: 1/25/2018
 console.log("Finished Loading HTML!");
 let finishedLoadingScript = false;
 
+// Checks localStorage for previously checked boxes and sets them checked.
+document.getElementById("autoCopy").checked = localStorage.getItem("autoCopy");
+document.getElementById("rememberInput").checked = localStorage.getItem("rememberInput");
+document.getElementById("darkMode").checked = localStorage.getItem("darkMode");
+document.getElementById("autoDarkMode").checked = localStorage.getItem("autoDarkMode");
+
+// If rememberInput checkbox is checked, then load input from localStorage
+if (document.getElementById("rememberInput").checked)
+{
+    document.getElementById("screen-text").value = localStorage.getItem("input");
+}
+
+// ---------------SETTINGS PAGE--------------- //
+// Event Listener for the settings page button
+let isSettingScreen = false;
+let settingsBtn = document.getElementById("settingsBtn");
+
+// Toggles between settings and calculator pages when settings button clicked (#settings display: none; in css)
+settingsBtn.addEventListener("click", function (event) {
+    if (isSettingScreen) {
+        document.getElementById("settings").style.display = "none";
+        document.getElementById("body").style.display = "block";
+        isSettingScreen = false;
+    } else {
+        document.getElementById("body").style.display = "none";
+        document.getElementById("settings").style.display = "block";
+        isSettingScreen = true;
+    }
+});
+
+// Event Listeners for Settings Check Boxes
+let checkBoxArray = document.getElementsByClassName("settingsBox");
+for (let i = 0; i < checkBoxArray.length; i++) {
+    let checkBoxElement = checkBoxArray[i];
+    switch (checkBoxElement.id) {
+        case "autoCopy":
+        checkBoxElement.addEventListener("click", function () {
+                function settingsAutoCopy(event) {
+                    if (event.target.checked)
+                    {
+                        localStorage.setItem("autoCopy", true);
+                        document.getElementById("result").textContent.select();
+                        document.execCommand("copy");
+                    }
+                    else {
+                        localStorage.setItem("autoCopy", false);
+                    }
+                    
+                }
+            }, false);
+        case "rememberInput":
+        checkBoxElement.addEventListener("click", function () {
+                function settingsRememberInput(event) {
+                    if (event.target.checked)
+                    {
+                        localStorage.setItem("rememberInput", true);
+                        //
+                    }
+                    else {
+                        localStorage.setItem("rememberInput", false);
+                    }
+                }
+            }, false);
+        case "darkMode":
+        checkBoxElement.addEventListener("click", function () {
+                function settingsDarkMode(event) {
+                    if (event.target.checked)
+                    {
+                        localStorage.setItem("darkMode", true);
+                        //
+                    }
+                    else {
+                        localStorage.setItem("darkMode", false);
+                    }
+                }
+            }, false);
+        case "autoDarkMode":
+        checkBoxElement.addEventListener("click", function () {
+                function settingsAutoDarkMode(event) {
+                    if (event.target.checked)
+                    {
+                        localStorage.setItem("autoDarkMode", true);
+                        //
+                    }
+                    else {
+                        localStorage.setItem("autoDarkMode", false);
+                    }
+                }
+            }, false);
+    }
+}
+
 // Tries to calculate the value of screen-text, returns false if fails.
 /*
     EVAL ERR: Evaluation Error
@@ -29,6 +121,10 @@ function calculate() {
 
         console.log("Output: " + input);
         printResult(input);
+        if (document.getElementById("rememberInput").checked)
+        {
+            localStorage.setItem("input", input);
+        }
         return true;
     }
 }
@@ -61,40 +157,7 @@ function insertStr(startingStr, insertStr, index) {
     return finalStr;
 }
 
-let isSettingScreen = false;
-let originalInnerHTML = document.getElementById("body").innerHTML;
-
-// Event Listener for the settings page button
-let settingsHTML = "hi";
-let settingsBtn = document.getElementById("settingsBtn");
-settingsBtn.addEventListener("click", function () {
-    if (isSettingScreen) {
-        document.getElementById("body").innerHTML = originalInnerHTML;
-        isSettingScreen = false;
-    } else {
-        document.getElementById("body").innerHTML = settingsHTML;
-        isSettingScreen = true;
-    }
-});
-
-// Function fired on checking the AutoCopy setting
-// Automatically copies the answer to your clipboard after pressing = or ENTER
-// function settingsAutoCopy()
-// {
-//     document.getElementById("result").textContent.select();
-//     document.execCommand("copy");
-// }
-
-// command: get or set
-// function settingsLocalStorageHandler(command, string)
-// {
-
-// }
-
-// function settingsRememberLastInput()
-// {
-
-// }
+// ---------------CALCULATOR PAGE--------------- //
 
 function allNumeric(input) {
     // Allowed characters
@@ -168,7 +231,7 @@ console.log("Keys: " + keys);
 
 // Adds an event listener to every key
 for (let i = 0; i < keys.length; i++) {
-    keys[i].addEventListener("click", function() {
+    keys[i].addEventListener("click", function () {
         keyClick(event, keys[i]);
     }, false);
     console.log("Added event listener to: " + keys[i].innerHTML);

@@ -20,6 +20,7 @@ body {
   font-size: 14px;
   min-height: 180px;
   width: 220px;
+  padding: 5px;
 }
 
 h1 {
@@ -113,10 +114,6 @@ img {
   box-shadow: inherit;
 }
 
-#body {
-  padding: 5px;
-}
-
 #screen-text {
   font: inherit;
   text-align: inherit;
@@ -159,7 +156,7 @@ td.key:hover {
   font-weight: 6000;
 }
 
-i.fa-cog {
+/* i.fa-cog {
   -webkit-transition: -webkit-transform 1.2s ease-in-out;
   transition: transform 1.2s ease-in-out;
 }
@@ -167,8 +164,43 @@ i.fa-cog {
 i.fa-cog:hover {
   -webkit-transform: rotate(180deg);
   transform: rotate(180deg);
+} */
+
+i.fa-cog:hover {
+  transform: scale(1.2);
 }
 
-i.fa-cog:active {
-  transform: scale(1.25);
+#body {
+
+}
+
+/* Settings Screen */
+
+#settings {
+  display: none;
+  width: 191.5px;
+}
+
+#settings div{
+  padding-top: 20px;
+}
+
+#autoCopy {
+
+}
+
+#rememberSession {
+
+}
+
+#darkMode {
+
+}
+
+#autoDarkMode {
+
+}
+
+.settingsBox {
+  
 }
