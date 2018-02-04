@@ -71,24 +71,41 @@ Date: 1/25/2018
         </div>
         <div id="settings">
             <div>
-                <input class="settingsBox" type="checkbox" id="autoCopy">
-                <span>Auto-copy answer to clipboard</span>
+                <label class="switch settingsBox" id="autoCopy">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Copy answer to clipboard</span>
             </div>
             <div>
-                <input class="settingsBox" type="checkbox" id="rememberInput">
-                <span>Remember last session's input</span>
+                <label class="switch settingsBox" id="rememberInput">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Remember last input</span>
             </div>
             <div>
-                <input class="settingsBox" type="checkbox" id="darkMode">
-                <span>Turn on Dark Mode</span>
+                <label class="switch settingsBox" id="darkMode">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Turn on Dark Mode</span>
             </div>
             <div>
-                <input class="settingsBox" type="checkbox" id="autoDarkMode">
-                <span>Automatic Dark Mode </span>
+                <label class="switch settingsBox" id="autoDarkMode">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Automatic Dark Mode</span>
             </div>
+            <h4>This Calculator supports the operators/special characters:</h4>
+            <code> + - * / ^ . % ()</code>
+            <h4>Future support for sqrt, sin, cos, etc is planned.</h4>
+            <h4>By Quintin Kerns</h4>
         </div>
     </div>
 </body>
-    <script src="sandbox.js"></script>
-    <script src="script.js"></script>
+<script src="sandbox.js"></script>
+<script src="script.js"></script>
+
 </html>

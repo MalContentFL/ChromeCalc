@@ -181,26 +181,82 @@ i.fa-cog:hover {
   width: 191.5px;
 }
 
-#settings div{
-  padding-top: 20px;
+#settings div {
+  padding-top: 7px;
 }
 
-#autoCopy {
-
+hr {
+  border: solid 0.5px black;
+  box-shadow: 0px 1px #a8a7a7;
 }
 
-#rememberSession {
-
+.switchText {
+  font-weight: 400;
+  font-size: 14px;
 }
 
-#darkMode {
-
+code {
+  padding: 0;
+  margin: 0;
+  font-weight: 1000;
+  font-size: 20px;
 }
 
-#autoDarkMode {
-
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 17px;
 }
 
-.settingsBox {
-  
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(13px);
+  -ms-transform: translateX(13px);
+  transform: translateX(13px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 17px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
