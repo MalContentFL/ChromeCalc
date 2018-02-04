@@ -19,16 +19,18 @@ Date: 1/25/2018
 
     <link href="style.css" rel="stylesheet" type="text/css"></link>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+    <link href="assets/digital-7/digital-7.ttf" rel="stylesheet" type="text/css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
         crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.1/math.min.js">
 </head>
 
 <body>
     <div class="model-header">
         <h1 class="logo">
-            <img class="logo-icon" src="images/icon_tiny.png">ChromeCalc
+            <img class="logo-icon" src="assets/icon_128.png">ChromeCalc
             <span class="settings">
-                <i class="fa fa-cog" onclick="cogOnClick()" aria-hidden="true"></i>
+                <i class="fa fa-cog" id="settingsBtn" aria-hidden="true"></i>
             </span>
         </h1>
         <hr>
@@ -36,7 +38,7 @@ Date: 1/25/2018
             <div class="calculator">
                 <div class="screen">
                     <div id="result"></div>
-                    <input onchange="calculate()" type="text" name="screen-text" id="screen-text" autofocus>
+                    <input type="text" name="screen-text" id="screen-text" autofocus>
                 </div>
                 <div class="keypad">
                     <table>
@@ -68,8 +70,43 @@ Date: 1/25/2018
                 </div>
             </div>
         </div>
+        <div id="settings">
+            <div>
+                <label class="switch settingsBox" id="autoCopy">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Copy answer to clipboard</span>
+            </div>
+            <div>
+                <label class="switch settingsBox" id="rememberInput">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Remember last input</span>
+            </div>
+            <div>
+                <label class="switch settingsBox" id="darkMode">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Turn on Dark Mode</span>
+            </div>
+            <div>
+                <label class="switch settingsBox" id="autoDarkMode">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switchText">Automatic Dark Mode</span>
+            </div>
+            <h4>This Calculator supports the operators/special characters:</h4>
+            <code> + - * / ^ . % ()</code>
+            <h4>Support for sqrt, sin, cos, etc is planned.</h4>
+            <h4>By Quintin Kerns. Version 1.0.0</h4>
+        </div>
     </div>
 </body>
-    <script src="sandbox.js"></script>
-    <script src="script.js"></script>
+<script src="sandbox.js"></script>
+<script src="script.js"></script>
+
 </html>

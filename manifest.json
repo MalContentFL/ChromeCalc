@@ -5,16 +5,15 @@
   "description": "The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / and (). Please report any bugs through the settings menu. Thanks!",
   "version": "1.0.0",
   "icons": {
-    "128": "images/icon_128.png"
+    "128": "assets/icon_128.png"
   },
   "browser_action": {
-    "default_icon": "images/icon_128.png",
+    "default_icon": "assets/icon_128.png",
     "default_popup": "popup.html"
   },
   "permissions": ["activeTab"],
   "sandbox": {
-    "pages": ["popup.html,sandbox.js"]
+    "pages": ["sandbox.js"]
   },
-  "content_security_policy":
-      "sandbox allow-scripts; script-src https://www.google.com"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }
