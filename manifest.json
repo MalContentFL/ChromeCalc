@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "ChromeCalc",
-  "description": "The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / and (). Please report any bugs through the settings menu. Thanks!",
+  "description": "The Minimalistic Pocket Calculator. Supports All Scientific Operators.",
   "version": "1.0.0",
   "icons": {
     "128": "assets/icon_128.png"
@@ -11,9 +11,5 @@
     "default_icon": "assets/icon_128.png",
     "default_popup": "popup.html"
   },
-  "permissions": ["activeTab"],
-  "sandbox": {
-    "pages": ["sandbox.js"]
-  },
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "permissions": ["activeTab"]
 }

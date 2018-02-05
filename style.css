@@ -170,9 +170,7 @@ i.fa-cog:hover {
   transform: scale(1.2);
 }
 
-#body {
-
-}
+#body {}
 
 /* Settings Screen */
 
@@ -203,6 +201,7 @@ code {
 }
 
 /* The switch - the box around the slider */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -211,9 +210,13 @@ code {
 }
 
 /* Hide default HTML checkbox */
-.switch input {display:none;}
+
+.switch input {
+  display: none;
+}
 
 /* The slider */
+
 .slider {
   position: absolute;
   cursor: pointer;
@@ -238,21 +241,22 @@ code {
   transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #2196F3;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #2196F3;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(13px);
   -ms-transform: translateX(13px);
   transform: translateX(13px);
 }
 
 /* Rounded sliders */
+
 .slider.round {
   border-radius: 17px;
 }
