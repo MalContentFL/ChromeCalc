@@ -1,10 +1,7 @@
 <!--
 Program: ChromeCalc
-Description: The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / and ().
-        Please report any bugs through the settings menu. Thanks!
+Description: The Minimalistic Pocket Calculator. Supports All Scientific Math Operators and Unit Conversions.
 Author: Quintin Kerns
-Date: 1/25/2018
-*/
 -->
 
 <!DOCTYPE html>
@@ -22,8 +19,6 @@ Date: 1/25/2018
     <link href="assets/digital-7/digital-7.ttf" rel="stylesheet" type="text/css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
         crossorigin="anonymous">
-    <!-- Loading this script violates Chrome CSP. Use 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/mathjs/3.20.1/math.min.js"></script> -->
 </head>
 
 <body>
@@ -73,41 +68,42 @@ Date: 1/25/2018
         </div>
         <div id="settings">
             <div>
-                <label class="switch settingsBox" id="autoCopy">
-                    <input type="checkbox">
+                <label class="switch">
+                    <input type="checkbox" class="settingsBox" id="autoCopy">
                     <span class="slider round"></span>
                 </label>
                 <span class="switchText">Copy answer to clipboard</span>
             </div>
             <div>
-                <label class="switch settingsBox" id="rememberInput">
-                    <input type="checkbox">
+                <label class="switch">
+                    <input type="checkbox" class="settingsBox" id="rememberInput">
                     <span class="slider round"></span>
                 </label>
                 <span class="switchText">Remember last input</span>
             </div>
             <div>
-                <label class="switch settingsBox" id="darkMode">
-                    <input type="checkbox">
+                <label class="switch">
+                    <input type="checkbox" class="settingsBox" id="darkMode">
                     <span class="slider round"></span>
                 </label>
                 <span class="switchText">Turn on Dark Mode</span>
             </div>
             <div>
-                <label class="switch settingsBox" id="autoDarkMode">
-                    <input type="checkbox">
+                <label class="switch">
+                    <input type="checkbox" class="settingsBox" id="autoDarkMode">
                     <span class="slider round"></span>
                 </label>
                 <span class="switchText">Automatic Dark Mode</span>
             </div>
-            <h4>This Calculator supports the operators/special characters:</h4>
-            <code> + - * / ^ . % ()</code>
-            <h4>Support for sqrt, sin, cos, etc is planned.</h4>
-            <h4>By Quintin Kerns. Version 1.0.0</h4>
+            <h4>This Calculator supports all scientific math operators and unit conversions:</h4>
+            <div>Example:</div>
+            <div>21*10(2)</div>
+            <div>10cm to in</div>
+            <div>cos(10pi)</div>
+            <h4>By Quintin Kerns. Version 1.1.0</h4>
         </div>
     </div>
 </body>
-<script src="sandbox.js"></script>
 <script src="script.js"></script>
 
 </html>

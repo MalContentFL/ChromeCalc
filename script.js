@@ -1,24 +1,70 @@
 /*
 Program: ChromeCalc
-Description: The Minimalistic Pocket Calculator. Supports Basic Math Operators + - * / ^ % and ().
-    Please report any bugs through the settings menu. Thanks!
+Description: The Minimalistic Pocket Calculator. Supports All Scientific Math Operators and Unit Conversions.
 Author: Quintin Kerns
-Date: 1/25/2018
 */
 
-console.log("Finished Loading HTML!");
 let finishedLoadingScript = false;
 
-// Checks localStorage for previously checked boxes and sets them checked.
-document.getElementById("autoCopy").checked = localStorage.getItem("autoCopy");
-document.getElementById("rememberInput").checked = localStorage.getItem("rememberInput");
-document.getElementById("darkMode").checked = localStorage.getItem("darkMode");
-document.getElementById("autoDarkMode").checked = localStorage.getItem("autoDarkMode");
+// Getters and Setters for sync storage
+/*
+    properties | data type | description
+    ------------------------------------
+    input: string, set when rememberInput is true
+    autoCopy: boolean, set when settings checkbox is toggled
+    rememberInput: boolean, set when settings checkbox is toggled
+    darkMode: boolean, set when settings checkbox is toggled
+    autoDarkMode: boolean, set when settings checkbox is toggled
+*/
 
-// If rememberInput checkbox is checked, then load input from localStorage
-if (document.getElementById("rememberInput").checked)
-{
-    document.getElementById("screen-text").value = localStorage.getItem("input");
+// Sets values for settings in sync storage on install to avoid issues where null/undefined
+chrome.runtime.onInstalled.addListener(function () {
+    let storageSettings = {
+        input: '',
+        autoCopy: false,
+        rememberInput: true,
+        darkMode: false,
+        autoDarkMode: false
+    }
+    console.log("Sync Storage settings: " + storageSettings);
+    chrome.storage.sync.set(storageSettings, function () {});
+});
+
+// Sets settings checkboxes to synced storage values
+// Could proably optimize this using a for loop, but meh...
+chrome.storage.sync.get(null, function (obj) {
+    // 1st property of obj is input. So we start at 1 to get states for checkboxes
+    for (let property in obj) {
+        console.log(property + " -> " + obj[property]);
+        if (document.getElementById(property) != null) {
+            document.getElementById(property).checked = obj[property];
+        }
+    }
+})
+
+// If rememberInput checkbox is checked, then load input from sync storage
+if (document.getElementById("rememberInput").checked) {
+    document.getElementById("screen-text").value = chrome.storage.sync.get("input");
+}
+
+//  -----------------------------------------------------------
+// All settings synced and ready. Start all dependent code here.
+//  -----------------------------------------------------------
+
+// Auto Dark Mode if slider checked.
+if (document.getElementById("autoDarkMode").checked) {
+    console.log(new Date().toLocaleTimeString());
+    let date = new Date().toLocaleTimeString();
+    if ((date.contains("PM") && date.substring(0, 1) > 8) ||
+        (date.contains("AM") && date.substring(0, 1) < 8)) {
+        enableDarkMode(true);
+    } else {
+        enableDarkMode(false);
+    }
+}
+
+function enableDarkMode(enabled) {
+
 }
 
 // ---------------SETTINGS PAGE--------------- //
@@ -26,7 +72,7 @@ if (document.getElementById("rememberInput").checked)
 let isSettingScreen = false;
 let settingsBtn = document.getElementById("settingsBtn");
 
-// Toggles between settings and calculator pages when settings button clicked (#settings display: none; in css)
+// Toggles between settings and calculator pages when settings button clicked
 settingsBtn.addEventListener("click", function (event) {
     if (isSettingScreen) {
         document.getElementById("settings").style.display = "none";
@@ -40,65 +86,31 @@ settingsBtn.addEventListener("click", function (event) {
 });
 
 // Event Listeners for Settings Check Boxes
-let checkBoxArray = document.getElementsByClassName("settingsBox");
-for (let i = 0; i < checkBoxArray.length; i++) {
-    let checkBoxElement = checkBoxArray[i];
-    switch (checkBoxElement.id) {
-        case "autoCopy":
-        checkBoxElement.addEventListener("click", function () {
-                function settingsAutoCopy(event) {
-                    if (event.target.checked)
-                    {
-                        localStorage.setItem("autoCopy", true);
-                        document.getElementById("result").textContent.select();
-                        document.execCommand("copy");
-                    }
-                    else {
-                        localStorage.setItem("autoCopy", false);
-                    }
-                    
+let settingsBoxArray = document.getElementsByClassName("settingsBox");
+for (let i = 0; i < settingsBoxArray.length; i++) {
+    let settingsElement = settingsBoxArray[i];
+    console.log(settingsElement);
+    settingsElement.addEventListener("click", function (event) {
+        let checkBoxId = event.target.id;
+        let checkBoxState = event.target.checked;
+        switch (checkBoxId) {
+            case "darkMode":
+                // Change css classes for body and font color, etc. to switch to dark mode.
+                if (event.target.checked) {
+                    document.getElementById("autoDarkMode").disabled = false;
+                } else {
+                    document.getElementById("autoDarkMode").checked = false;
+                    document.getElementById("autoDarkMode").disabled = true;
+                    chrome.storage.sync.set({
+                        "autoDarkMode": false
+                    }, function () {});
                 }
-            }, false);
-        case "rememberInput":
-        checkBoxElement.addEventListener("click", function () {
-                function settingsRememberInput(event) {
-                    if (event.target.checked)
-                    {
-                        localStorage.setItem("rememberInput", true);
-                        //
-                    }
-                    else {
-                        localStorage.setItem("rememberInput", false);
-                    }
-                }
-            }, false);
-        case "darkMode":
-        checkBoxElement.addEventListener("click", function () {
-                function settingsDarkMode(event) {
-                    if (event.target.checked)
-                    {
-                        localStorage.setItem("darkMode", true);
-                        //
-                    }
-                    else {
-                        localStorage.setItem("darkMode", false);
-                    }
-                }
-            }, false);
-        case "autoDarkMode":
-        checkBoxElement.addEventListener("click", function () {
-                function settingsAutoDarkMode(event) {
-                    if (event.target.checked)
-                    {
-                        localStorage.setItem("autoDarkMode", true);
-                        //
-                    }
-                    else {
-                        localStorage.setItem("autoDarkMode", false);
-                    }
-                }
-            }, false);
-    }
+                break;
+        }
+        chrome.storage.sync.set({
+            checkBoxId: checkBoxState
+        }, function () {})
+    });
 }
 
 // Tries to calculate the value of screen-text, returns false if fails.
@@ -109,26 +121,41 @@ for (let i = 0; i < checkBoxArray.length; i++) {
 */
 function calculate() {
     let input = document.getElementById("screen-text").value;
-
+    let output;
     console.log("Input: " + input);
-
-    // Make sure input is only numbers and operators
-        input = math.eval(input);
-
-        console.log("Output: " + input);
-        printResult(input);
-        if (document.getElementById("rememberInput").checked)
-        {
-            localStorage.setItem("input", input);
+    // AJAX Request to MathJS API
+    let urlEncodedInput = encodeURIComponent(input);
+    console.log("Encoded Input: " + urlEncodedInput);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            output = this.responseText;
+            console.log("Output: " + output);
+            printResult(output);
+        } else if (this.status == 400) {
+            printResult("SYNTAX ERR");
         }
+    };
+    xhttp.open("GET", `http://api.mathjs.org/v1/?expr=${urlEncodedInput}`, true);
+    xhttp.send();
+
+    //
+    if (document.getElementById("rememberInput").checked) {
+        chrome.storage.sync.set(input, input);
+    }
 }
 
 // Event Listener for the screen-text
-document.addEventListener("keypress", function (e) {
-    // console.log("Keypress: " + e.key);
-    if (e.key.toLocaleLowerCase() == "enter") {
+document.addEventListener("keypress", function (event) {
+    if (event.key == "Enter") {
         console.log("Calculating...");
         calculate();
+        // If autoCopy is on, select, copy, and deselect result.
+        if (document.getElementById("autoCopy").checked) {
+            document.getElementById("result").select();
+            document.execCommand("copy");
+            document.selection.empty();
+        }
     }
 }, false);
 
@@ -140,32 +167,31 @@ function printResult(res) {
 
 // Gets keys into an array
 const keys = [].slice.call(document.getElementsByClassName("key"));
-console.log("Keys: " + keys);
+// console.log("Keys: " + keys);
 
 // Adds an event listener to every key
 for (let i = 0; i < keys.length; i++) {
     keys[i].addEventListener("click", function () {
         keyClick(event, keys[i]);
     }, false);
-    console.log("Added event listener to: " + keys[i].innerHTML);
 }
 
 function keyClick(e, key) {
+    // Keeps keys from being pressed when event listeners are applied before script is done loading.
     if (!finishedLoadingScript) {
         //console.log("Not finished loading");
         return;
     }
-    console.log(key.innerHTML + " Clicked.");
     // switch covers cases where we are not just adding a number/symbol to the screen-text
     let inner = key.innerHTML;
     switch (inner) {
         // Clear screen-text
-        case 'C':
+        case "C":
             document.getElementById("screen-text").value = null;
             document.getElementById("result").innerHTML = null
             break;
             // Execute calculate()
-        case '=':
+        case "=":
             calculate();
             break;
         default:
