@@ -2,6 +2,8 @@
 A minimalistic calculator extension.
 By Quintin Kerns.
 
-The calculator currently supports + - * / ^ % and ().
-Future support for logic (&&, || >, <, etc.), sqrt, and math syntax
-similar to symbolab.com is planned.
+The calculator currently supports all scientific math operators, functions, and unit conversions
+
+Ex: 10(10)
+    10 cm to in
+    cos(10pi)
