@@ -28,6 +28,12 @@ chrome.runtime.onInstalled.addListener(function () {
     }
     console.log("Sync Storage settings: " + storageSettings);
     chrome.storage.sync.set(storageSettings, function () {});
+    for (let property in obj) {
+        console.log(property + " -> " + obj[property]);
+        if (document.getElementById(property) != null) {
+            document.getElementById(property).checked = obj[property];
+        }
+    }
 });
 
 // Sets settings checkboxes to synced storage values
@@ -42,14 +48,22 @@ chrome.storage.sync.get(null, function (obj) {
     }
 })
 
-// If rememberInput checkbox is checked, then load input from sync storage
-if (document.getElementById("rememberInput").checked) {
-    document.getElementById("screen-text").value = chrome.storage.sync.get("input");
-}
-
 //  -----------------------------------------------------------
 // All settings synced and ready. Start all dependent code here.
 //  -----------------------------------------------------------
+
+// If rememberInput checkbox is checked, then load input from sync storage
+if (document.getElementById("rememberInput").checked) {
+    chrome.storage.sync.get("input", function (obj) {
+        console.log("input obj key: " + Object.keys(obj)[0]);
+        document.getElementById("screen-text").value = Object.keys(obj)[0];
+    });
+}
+
+if (!document.getElementById("darkMode").checked)
+{
+    document.getElementById("autoDarkMode").disabled = true;
+}
 
 // Auto Dark Mode if slider checked.
 if (document.getElementById("autoDarkMode").checked) {
@@ -63,9 +77,21 @@ if (document.getElementById("autoDarkMode").checked) {
     }
 }
 
+// Change CSS Here
 function enableDarkMode(enabled) {
 
 }
+
+// DEBUGGING
+document.getElementsByClassName("logo-icon")[0].addEventListener("click", function () {
+    chrome.storage.sync.get(null, function (obj) {
+        console.log("Sync Storage Data: " + Object.entries(obj));
+    })
+});
+document.getElementsByClassName("logo-icon")[0].addEventListener("dblclick", function () {
+    console.log("Sync Storage Cleared.");
+    chrome.storage.sync.clear();
+});
 
 // ---------------SETTINGS PAGE--------------- //
 // Event Listener for the settings page button
@@ -90,26 +116,28 @@ let settingsBoxArray = document.getElementsByClassName("settingsBox");
 for (let i = 0; i < settingsBoxArray.length; i++) {
     let settingsElement = settingsBoxArray[i];
     console.log(settingsElement);
-    settingsElement.addEventListener("click", function (event) {
+    settingsElement.addEventListener("click", function () {
         let checkBoxId = event.target.id;
         let checkBoxState = event.target.checked;
-        switch (checkBoxId) {
-            case "darkMode":
-                // Change css classes for body and font color, etc. to switch to dark mode.
-                if (event.target.checked) {
-                    document.getElementById("autoDarkMode").disabled = false;
-                } else {
-                    document.getElementById("autoDarkMode").checked = false;
-                    document.getElementById("autoDarkMode").disabled = true;
-                    chrome.storage.sync.set({
-                        "autoDarkMode": false
-                    }, function () {});
-                }
-                break;
+        if (event.target.id == "autoDarkMode")
+        {
+            
+        } else
+        if (event.target.id == "darkMode") {
+            if (checkBoxState) {
+                console.log("Enabled darkmode");
+                enableDarkMode(true);
+                document.getElementById("autoDarkMode").disabled = false;
+            } else {
+                console.log("Disabled darkmode");
+                enableDarkMode(false);
+                document.getElementById("autoDarkMode").checked = false;
+                document.getElementById("autoDarkMode").disabled = true;
+            }
         }
         chrome.storage.sync.set({
             checkBoxId: checkBoxState
-        }, function () {})
+        }, function () {});
     });
 }
 
@@ -137,11 +165,17 @@ function calculate() {
         }
     };
     xhttp.open("GET", `http://api.mathjs.org/v1/?expr=${urlEncodedInput}`, true);
-    xhttp.send();
+    try {
+        xhttp.send();
+    } catch (error) {
+        printResult("NETWORK ERR");
+    }
 
-    //
+    // Save input to sync storage if setting is checked
     if (document.getElementById("rememberInput").checked) {
-        chrome.storage.sync.set(input, input);
+        chrome.storage.sync.set({
+            "input": input
+        }, function () {});
     }
 }
 
@@ -152,15 +186,16 @@ document.addEventListener("keypress", function (event) {
         calculate();
         // If autoCopy is on, select, copy, and deselect result.
         if (document.getElementById("autoCopy").checked) {
+            // Select and copy result text
             document.getElementById("result").select();
             document.execCommand("copy");
-            document.selection.empty();
         }
     }
 }, false);
 
 function printResult(res) {
-    document.getElementById("result").innerHTML = res;
+    document.getElementById("result").value = res;
+    console.log("output value: " + document.getElementById("result").value);
 }
 
 // ---------------CALCULATOR PAGE--------------- //

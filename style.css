@@ -136,6 +136,12 @@ img {
   height: 30px;
   text-align: inherit;
   text-overflow: inherit;
+  border: none;
+  background: none;
+  font-size: 32px;
+  letter-spacing: 3px;
+  font-family: "Digital-7", Arial, sans-serif;
+  width: 170px;
 }
 
 .keypad {
