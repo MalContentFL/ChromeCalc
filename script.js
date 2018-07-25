@@ -13,8 +13,6 @@ let finishedLoadingScript = false;
     input: string, set when rememberInput is true
     autoCopy: boolean, set when settings checkbox is toggled
     rememberInput: boolean, set when settings checkbox is toggled
-    darkMode: boolean, set when settings checkbox is toggled
-    autoDarkMode: boolean, set when settings checkbox is toggled
 */
 
 // Sets values for settings in sync storage on install to avoid issues where null/undefined
@@ -22,9 +20,7 @@ chrome.runtime.onInstalled.addListener(function () {
     let storageSettings = {
         input: '',
         autoCopy: false,
-        rememberInput: true,
-        darkMode: false,
-        autoDarkMode: false
+        rememberInput: true
     }
     console.log("Sync Storage settings: " + storageSettings);
     chrome.storage.sync.set(storageSettings, function () {});
@@ -53,34 +49,12 @@ chrome.storage.sync.get(null, function (obj) {
 //  -----------------------------------------------------------
 
 // If rememberInput checkbox is checked, then load input from sync storage
-if (document.getElementById("rememberInput").checked) {
-    chrome.storage.sync.get("input", function (obj) {
-        console.log("input obj key: " + Object.keys(obj)[0]);
-        document.getElementById("screen-text").value = Object.keys(obj)[0];
-    });
-}
-
-if (!document.getElementById("darkMode").checked)
-{
-    document.getElementById("autoDarkMode").disabled = true;
-}
-
-// Auto Dark Mode if slider checked.
-if (document.getElementById("autoDarkMode").checked) {
-    console.log(new Date().toLocaleTimeString());
-    let date = new Date().toLocaleTimeString();
-    if ((date.contains("PM") && date.substring(0, 1) > 8) ||
-        (date.contains("AM") && date.substring(0, 1) < 8)) {
-        enableDarkMode(true);
-    } else {
-        enableDarkMode(false);
-    }
-}
-
-// Change CSS Here
-function enableDarkMode(enabled) {
-
-}
+// if (document.getElementById("rememberInput").checked) {
+//     chrome.storage.sync.get("input", function (obj) {
+//         console.log("input obj key: " + Object.keys(obj)[0]);
+//         document.getElementById("screen-text").value = Object.keys(obj)[0];
+//     });
+// }
 
 // DEBUGGING
 document.getElementsByClassName("logo-icon")[0].addEventListener("click", function () {
@@ -119,22 +93,6 @@ for (let i = 0; i < settingsBoxArray.length; i++) {
     settingsElement.addEventListener("click", function () {
         let checkBoxId = event.target.id;
         let checkBoxState = event.target.checked;
-        if (event.target.id == "autoDarkMode")
-        {
-            
-        } else
-        if (event.target.id == "darkMode") {
-            if (checkBoxState) {
-                console.log("Enabled darkmode");
-                enableDarkMode(true);
-                document.getElementById("autoDarkMode").disabled = false;
-            } else {
-                console.log("Disabled darkmode");
-                enableDarkMode(false);
-                document.getElementById("autoDarkMode").checked = false;
-                document.getElementById("autoDarkMode").disabled = true;
-            }
-        }
         chrome.storage.sync.set({
             checkBoxId: checkBoxState
         }, function () {});
@@ -184,12 +142,26 @@ document.addEventListener("keypress", function (event) {
     if (event.key == "Enter") {
         console.log("Calculating...");
         calculate();
-        // If autoCopy is on, select, copy, and deselect result.
-        if (document.getElementById("autoCopy").checked) {
-            // Select and copy result text
-            document.getElementById("result").select();
-            document.execCommand("copy");
-        }
+        // If autoCopy is on, copy result.
+        // if (document.getElementById("autoCopy").checked) {
+        //     let textArea = document.createElement("textarea");
+        //     // Edit styles to make textArea invisible
+        //     textArea.style.position = 'fixed';
+        //     textArea.style.top = 0;
+        //     textArea.style.left = 0;
+        //     textArea.style.width = '2em';
+        //     textArea.style.height = '2em';
+        //     textArea.style.padding = 0;
+        //     textArea.style.border = 'none';
+        //     textArea.style.outline = 'none';
+        //     textArea.style.boxShadow = 'none';
+        //     textArea.style.background = 'transparent';
+        //     // Select and copy textArea contents
+        //     textArea.value = document.getElementById("result").value;
+        //     document.body.appendChild(textArea);
+        //     textArea.focus();
+        //     textArea.select();
+        // }
     }
 }, false);
 
